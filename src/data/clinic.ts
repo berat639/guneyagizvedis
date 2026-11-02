@@ -49,6 +49,7 @@ export const CLINIC_INFO = {
     logo: "/images/logo.png",
     heroRoom: "/images/klinikoda.png",
     clinicRoom2: "/images/klinikoda2.webp",
+    clinicRoom3: "/images/klinik3.webp",
     tomography: "/images/tomografi.webp",
     entrance: "/images/giris.webp",
   },

@@ -23,6 +23,8 @@ export function ClinicOrganizationJsonLd() {
     image: [
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.entrance}`,
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.heroRoom}`,
+      `${CLINIC_INFO.domain}${CLINIC_INFO.images.clinicRoom2}`,
+      `${CLINIC_INFO.domain}${CLINIC_INFO.images.clinicRoom3}`,
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.tomography}`,
     ],
     telephone: "+90-312-261-00-01",

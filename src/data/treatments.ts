@@ -413,7 +413,7 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "protetik diş tedavisi ankara",
     ],
     iconType: "prosthesis",
-    featuredImage: "/images/klinikoda.png",
+    featuredImage: "/images/klinik3.webp",
     featuredImageAlt:
       "Güney Ağız ve Diş Sağlığı Protetik Diş Tedavisi ve Restorasyon Muayene Odası",
     secondaryImage: "/images/giris.webp",
@@ -633,7 +633,7 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "doğal diş estetiği",
     ],
     iconType: "aesthetics",
-    featuredImage: "/images/klinikoda.png",
+    featuredImage: "/images/klinik3.webp",
     featuredImageAlt:
       "Güney Ağız ve Diş Sağlığı Estetik ve Restoratif Diş Hekimliği Kliniği",
     secondaryImage: "/images/klinikoda2.webp",

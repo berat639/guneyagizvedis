@@ -88,9 +88,9 @@ export function AboutAndTechSection() {
             </div>
           </div>
 
-          {/* Right Real Clinic Photos Showcase (7 Cols — giris.webp & klinikoda2.webp) */}
+          {/* Right Real Clinic Photos Showcase (7 Cols — giris.webp, klinikoda2.webp & klinik3.webp) */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-12 gap-5 items-stretch">
-            <div className="sm:col-span-7 relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[280px] sm:min-h-[360px] group">
+            <div className="sm:col-span-7 relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[280px] sm:min-h-[380px] group">
               <Image
                 src={CLINIC_INFO.images.entrance}
                 alt="Özel Güney Ağız ve Diş Sağlığı Polikliniği Etimesgut"
@@ -112,25 +112,41 @@ export function AboutAndTechSection() {
               </div>
             </div>
 
-            <div className="sm:col-span-5 relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[280px] sm:min-h-[360px] group">
-              <Image
-                src={CLINIC_INFO.images.clinicRoom2}
-                alt="Güney Ağız ve Diş Sağlığı Klinik 2 Tedavi Odası"
-                fill
-                quality={75}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 25vw"
-                className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/15 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/95 backdrop-blur-md p-4 shadow-lg border border-white">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-slate-900">
-                  <ShieldCheck className="w-4 h-4 text-red-700" />
-                  <span>Modern Tedavi Üniteleri</span>
+            <div className="sm:col-span-5 grid grid-cols-1 gap-5">
+              <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[180px] sm:min-h-[180px] group">
+                <Image
+                  src={CLINIC_INFO.images.clinicRoom2}
+                  alt="Güney Ağız ve Diş Sağlığı Klinik 2 Tedavi Odası"
+                  fill
+                  quality={75}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 25vw"
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/10 to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-white/95 backdrop-blur-md px-3.5 py-2.5 shadow-md border border-white">
+                  <div className="flex items-center gap-1.5 text-xs font-extrabold text-slate-900">
+                    <ShieldCheck className="w-3.5 h-3.5 text-red-700 shrink-0" />
+                    <span>Bağımsız Tedavi Ünitesi (Klinik 2)</span>
+                  </div>
                 </div>
-                <p className="text-xs text-slate-700 mt-1">
-                  Yüksek sterilizasyon standartlarına sahip bağımsız muayene
-                  odalarımız.
-                </p>
+              </div>
+
+              <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[180px] sm:min-h-[180px] group">
+                <Image
+                  src={CLINIC_INFO.images.clinicRoom3}
+                  alt="Güney Ağız ve Diş Sağlığı Klinik 3 Geniş Muayene ve Tedavi Odası"
+                  fill
+                  quality={75}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 25vw"
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/10 to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-white/95 backdrop-blur-md px-3.5 py-2.5 shadow-md border border-white">
+                  <div className="flex items-center gap-1.5 text-xs font-extrabold text-slate-900">
+                    <ShieldCheck className="w-3.5 h-3.5 text-red-700 shrink-0" />
+                    <span>Modern Muayene Odası (Klinik 3)</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

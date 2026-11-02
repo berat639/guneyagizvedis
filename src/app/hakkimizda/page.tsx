@@ -51,6 +51,14 @@ export default function AboutPage() {
       alt: "Güney Ağız ve Diş Sağlığı Polikliniği Klinik 2 Muayene Odası",
     },
     {
+      title: "Geniş ve Konforlu Muayene Odası (Klinik 3)",
+      subtitle: "Ergonomik Hasta Ünitesi & Steril Çalışma Alanı",
+      description:
+        "Ferah iç hacmi, modern aydınlatma sistemi ve tam donanımlı dental ünitesi ile hem yetişkin hem de çocuk hastalarımız için konforlu tedavi alanı.",
+      image: CLINIC_INFO.images.clinicRoom3,
+      alt: "Güney Ağız ve Diş Sağlığı Polikliniği Klinik 3 Geniş Muayene Odası",
+    },
+    {
       title: "3D Dental Tomografi ve Dijital Radyoloji Ünitesi",
       subtitle: "Üç Boyutlu Görüntüleme & Panoramik Röntgen",
       description:
@@ -240,11 +248,13 @@ export default function AboutPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-7 items-stretch">
             {clinicSpaces.map((space, idx) => (
               <div
                 key={idx}
-                className="rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-2xs flex flex-col justify-between"
+                className={`${
+                  idx < 2 ? "md:col-span-3" : "md:col-span-2"
+                } rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-2xs flex flex-col justify-between`}
               >
                 <div className="relative h-64 sm:h-80 w-full bg-slate-100">
                   <Image
@@ -252,7 +262,11 @@ export default function AboutPage() {
                     alt={space.alt}
                     fill
                     quality={75}
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes={
+                      idx < 2
+                        ? "(max-width: 768px) 100vw, 50vw"
+                        : "(max-width: 768px) 100vw, 33vw"
+                    }
                     className="object-cover object-center"
                   />
                 </div>
