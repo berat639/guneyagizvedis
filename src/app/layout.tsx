@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { CLINIC_INFO } from "@/data/clinic";
 import { AssistantProvider } from "@/components/assistant/AssistantContext";
@@ -78,6 +79,11 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </AssistantProvider>
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="AtnUwbyczze6jW5yg2C6Aw"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
