@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { CLINIC_INFO } from "@/data/clinic";
 import { AssistantProvider } from "@/components/assistant/AssistantContext";
@@ -72,6 +71,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
+      <head>
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="AtnUwbyczze6jW5yg2C6Aw"
+          async
+        />
+      </head>
       <body className="font-sans antialiased min-h-screen flex flex-col bg-white text-slate-900">
         <ClinicOrganizationJsonLd />
         <AssistantProvider>
@@ -79,11 +85,6 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </AssistantProvider>
-        <Script
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="AtnUwbyczze6jW5yg2C6Aw"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );
