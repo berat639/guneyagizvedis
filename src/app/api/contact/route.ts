@@ -355,21 +355,21 @@ export async function POST(request: Request) {
     usedChallengeNonces.set(nonce, now + CHALLENGE_TTL_MS);
     ipRequestLog.set(ip, [...previousTimestamps, now]);
 
-    // Alıcı e-posta adresi YALNIZCA sunucuda .env'den okunur, istemciye asla gönderilmez
+    // Alıcı e-posta adresi YALNIZCA sunucuda .env'den okunur (info@guneyagizvedis.com -> Gmail'e gönderir)
     const receiverEmail =
       process.env.CONTACT_RECEIVER_EMAIL || "incecamberat@gmail.com";
 
-    const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
-    const smtpPort = Number(process.env.SMTP_PORT || "465");
-    const smtpUser = process.env.SMTP_USER;
+    const smtpHost = process.env.SMTP_HOST || "mail.guneyagizvedis.com";
+    const smtpPort = Number(process.env.SMTP_PORT || "587");
+    const smtpUser = process.env.SMTP_USER || "info@guneyagizvedis.com";
     const smtpPass = process.env.SMTP_PASS;
 
-    if (!smtpUser || !smtpPass) {
+    if (!smtpPass) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Sunucu e-posta (SMTP) yapılandırması henüz tamamlanmamış. Lütfen .env dosyasındaki SMTP_USER ve SMTP_PASS alanlarını kontrol edin.",
+            "Sunucu e-posta (SMTP) şifresi henüz tanımlanmamış. Lütfen .env dosyasındaki SMTP_PASS alanına info@guneyagizvedis.com şifresini giriniz.",
         },
         { status: 503 }
       );
@@ -382,6 +382,9 @@ export async function POST(request: Request) {
       auth: {
         user: smtpUser,
         pass: smtpPass,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
