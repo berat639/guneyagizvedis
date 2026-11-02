@@ -40,9 +40,11 @@ ENV NEXT_PUBLIC_RECAPTCHA_SITE_KEY="6Ld9wQwuAAAAAPnIbwYCbHwjF1JEzTK-m70-b98W"
 ENV RECAPTCHA_SECRET_KEY="6Ld9wQwuAAAAAGRRkNjnLd8-Kcx1WYrrgSvRqL0q"
 ENV CONTACT_RECEIVER_EMAIL="incecamberat@gmail.com"
 ENV SMTP_HOST="mail.kurumsaleposta.com"
-ENV SMTP_PORT="587"
+ENV SMTP_PORT="465"
+ENV SMTP_SECURE="true"
 ENV SMTP_USER="info@guneyagizvedis.com"
-ENV SMTP_FROM="Özel Güney Ağız ve Diş Sağlığı <info@guneyagizvedis.com>"
+ENV SMTP_FROM="info@guneyagizvedis.com"
+ENV SMTP_FROM_NAME="Güney Ağız ve Diş Sağlığı"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

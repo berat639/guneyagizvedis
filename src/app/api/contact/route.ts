@@ -241,37 +241,47 @@ export async function POST(request: Request) {
       process.env.CONTACT_RECEIVER_EMAIL || "incecamberat@gmail.com";
 
     const smtpHost = process.env.SMTP_HOST || "mail.kurumsaleposta.com";
-    const smtpPort = Number(process.env.SMTP_PORT || "587");
+    const smtpPort = Number(process.env.SMTP_PORT || "465");
+    const smtpSecure =
+      process.env.SMTP_SECURE !== undefined
+        ? process.env.SMTP_SECURE === "true"
+        : smtpPort === 465;
     const smtpUser = process.env.SMTP_USER || "info@guneyagizvedis.com";
-    const smtpPass = process.env.SMTP_PASS;
+    const smtpPass = process.env.SMTP_PASSWORD || process.env.SMTP_PASS;
+    const smtpFrom = process.env.SMTP_FROM || smtpUser;
+    const smtpFromName =
+      process.env.SMTP_FROM_NAME || "Güney Ağız ve Diş Sağlığı";
 
     if (!smtpPass) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Sunucu e-posta (SMTP) şifresi henüz tanımlanmamış. Lütfen .env dosyasındaki SMTP_PASS alanına info@guneyagizvedis.com şifresini giriniz.",
+            "Sunucu e-posta şifresi (SMTP_PASSWORD) henüz tanımlanmamış.",
         },
         { status: 503 }
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+    const createSmtpTransporter = (port: number, secure: boolean) =>
+      nodemailer.createTransport({
+        host: smtpHost,
+        port,
+        secure,
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        auth: {
+          user: smtpUser,
+          pass: smtpPass,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
 
-    const fromAddress =
-      process.env.SMTP_FROM ||
-      `"Özel Güney Ağız ve Diş Sağlığı" <${smtpUser}>`;
+    const fromAddress = smtpFrom.includes("<")
+      ? smtpFrom
+      : `"${smtpFromName}" <${smtpFrom}>`;
 
     const escapedName = escapeHtml(rawName);
     const escapedEmail = escapeHtml(rawEmail);
@@ -279,7 +289,7 @@ export async function POST(request: Request) {
     const escapedBranch = escapeHtml(safeBranch);
     const escapedMessage = escapeHtml(rawMessage);
 
-    await transporter.sendMail({
+    const mailOptions = {
       from: fromAddress,
       to: receiverEmail,
       replyTo: rawEmail,
@@ -312,7 +322,20 @@ export async function POST(request: Request) {
           </div>
         </div>
       `,
-    });
+    };
+
+    try {
+      const primaryTransporter = createSmtpTransporter(smtpPort, smtpSecure);
+      await primaryTransporter.sendMail(mailOptions);
+    } catch {
+      const fallbackPort = smtpPort === 465 ? 587 : 465;
+      const fallbackSecure = fallbackPort === 465;
+      const fallbackTransporter = createSmtpTransporter(
+        fallbackPort,
+        fallbackSecure
+      );
+      await fallbackTransporter.sendMail(mailOptions);
+    }
 
     return NextResponse.json({
       success: true,
