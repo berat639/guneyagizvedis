@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
 import nodemailer from "nodemailer";
 
 export const dynamic = "force-dynamic";
 
 // ---------------------------------------------------------------------------
-// 1. BELLEK İÇİ RATE LIMITER & TEK KULLANIMLIK TOKEN KORUMASI (REPLAY GUARD)
+// 1. BELLEK İÇİ RATE LIMITER (IP BAZLI FLOOD / BRUTE-FORCE KORUMASI)
 // ---------------------------------------------------------------------------
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 dakika
 const MAX_REQUESTS_PER_WINDOW = 3; // 10 dakikada IP başına en fazla 3 gönderim
-const CHALLENGE_TTL_MS = 10 * 60 * 1000; // Captcha 10 dakika geçerli
 const MIN_FILL_TIME_MS = 2000; // En az 2 saniye (bot koruması)
 
 const ipRequestLog = new Map<string, number[]>();
-const usedChallengeNonces = new Map<string, number>();
+const usedRecaptchaTokens = new Map<string, number>();
 
 function cleanupExpiredRecords(now: number) {
   for (const [ip, timestamps] of ipRequestLog.entries()) {
@@ -24,9 +22,9 @@ function cleanupExpiredRecords(now: number) {
       ipRequestLog.set(ip, active);
     }
   }
-  for (const [nonce, expiresAt] of usedChallengeNonces.entries()) {
+  for (const [tokenHash, expiresAt] of usedRecaptchaTokens.entries()) {
     if (now > expiresAt) {
-      usedChallengeNonces.delete(nonce);
+      usedRecaptchaTokens.delete(tokenHash);
     }
   }
 }
@@ -37,14 +35,6 @@ function getClientIp(request: Request): string {
     return forwarded.split(",")[0].trim();
   }
   return request.headers.get("x-real-ip")?.trim() || "127.0.0.1";
-}
-
-function getCaptchaSecret(): string {
-  return (
-    process.env.CAPTCHA_SECRET ||
-    process.env.SMTP_PASS ||
-    "guney-agiz-ve-dis-default-hmac-secret-2026-secure"
-  );
 }
 
 // ---------------------------------------------------------------------------
@@ -73,67 +63,7 @@ const ALLOWED_TOPICS = new Set([
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // ---------------------------------------------------------------------------
-// 3. SUNUCU TARAFLI SVG CAPTCHA ÜRETİMİ (GET /api/contact)
-// ---------------------------------------------------------------------------
-function generateCaptchaSvg(expressionText: string): string {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="44" viewBox="0 0 140 44">
-    <rect width="140" height="44" rx="10" fill="#fff1f2" stroke="#fecdd3" stroke-width="1.5"/>
-    <path d="M10 34 Q 45 10, 80 30 T 130 16" stroke="#fda4af" stroke-width="1.5" fill="none" opacity="0.7"/>
-    <path d="M14 14 Q 60 36, 95 14 T 128 32" stroke="#cbd5e1" stroke-width="1.2" fill="none" opacity="0.8"/>
-    <circle cx="28" cy="14" r="2" fill="#fb7185" opacity="0.5"/>
-    <circle cx="105" cy="32" r="2.5" fill="#94a3b8" opacity="0.5"/>
-    <text x="70" y="28" font-family="monospace, sans-serif" font-size="19" font-weight="800" fill="#881337" text-anchor="middle" letter-spacing="2">${expressionText}</text>
-  </svg>`;
-  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
-}
-
-export async function GET(request: Request) {
-  const now = Date.now();
-  cleanupExpiredRecords(now);
-
-  const ip = getClientIp(request);
-  const numA = crypto.randomInt(2, 10);
-  const numB = crypto.randomInt(1, 9);
-  const isAddition = crypto.randomInt(0, 2) === 1 || numA <= numB;
-
-  const expectedAnswer = isAddition ? numA + numB : numA - numB;
-  const operatorSymbol = isAddition ? "+" : "-";
-  const expressionText = `${numA} ${operatorSymbol} ${numB} = ?`;
-
-  const nonce = crypto.randomBytes(12).toString("hex");
-  const issuedAt = now;
-
-  // Cevap istemciye GÖNDERİLMEZ; yalnızca sunucu gizli anahtarıyla HMAC imzasına dahil edilir
-  const payloadData = `${nonce}:${issuedAt}:${ip}`;
-  const hmacSignature = crypto
-    .createHmac("sha256", getCaptchaSecret())
-    .update(`${payloadData}:${expectedAnswer}`)
-    .digest("hex");
-
-  const challengeToken = Buffer.from(
-    JSON.stringify({
-      n: nonce,
-      t: issuedAt,
-      s: hmacSignature,
-    })
-  ).toString("base64url");
-
-  return NextResponse.json(
-    {
-      captchaImage: generateCaptchaSvg(expressionText),
-      challengeToken,
-      turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null,
-    },
-    {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-      },
-    }
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 4. GÜVENLİ DOĞRULAMA VE GÖNDERİM (POST /api/contact)
+// 3. GÜVENLİ GOOGLE reCAPTCHA v2 DOĞRULAMASI VE GÖNDERİM (POST /api/contact)
 // ---------------------------------------------------------------------------
 interface ContactRequestBody {
   name?: string;
@@ -142,9 +72,8 @@ interface ContactRequestBody {
   branch?: string;
   message?: string;
   website?: string; // Honeypot alanı (doluysa bot)
-  captchaAnswer?: string;
-  challengeToken?: string;
-  turnstileToken?: string;
+  formLoadedAt?: number;
+  recaptchaToken?: string;
 }
 
 export async function POST(request: Request) {
@@ -169,7 +98,7 @@ export async function POST(request: Request) {
 
     const body = (await request.json()) as ContactRequestBody;
 
-    // Katman 2: Honeypot (Bot Tuzak Alanı) Kontrolü
+    // Katman 2: Honeypot (Bot Tuzak Alanı) & Doldurma Süresi Kontrolü
     if (body.website && body.website.trim().length > 0) {
       return NextResponse.json(
         { success: false, error: "Güvenlik doğrulaması başarısız oldu." },
@@ -177,59 +106,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Katman 3: Kriptografik HMAC Captcha & Süre & Tek Kullanımlık Nonce Kontrolü
-    const userAnswer = (body.captchaAnswer || "").trim();
-    const rawToken = (body.challengeToken || "").trim();
-
-    if (!userAnswer || !rawToken) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Lütfen güvenlik sorusunu (Captcha) yanıtlayınız.",
-        },
-        { status: 400 }
-      );
-    }
-
-    let decodedToken: { n: string; t: number; s: string };
-    try {
-      decodedToken = JSON.parse(
-        Buffer.from(rawToken, "base64url").toString("utf-8")
-      );
-    } catch {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Geçersiz güvenlik anahtarı. Lütfen sayfayı yenileyin.",
-        },
-        { status: 400 }
-      );
-    }
-
-    const { n: nonce, t: issuedAt, s: signature } = decodedToken;
-
-    if (!nonce || !issuedAt || !signature) {
-      return NextResponse.json(
-        { success: false, error: "Güvenlik doğrulaması eksik." },
-        { status: 400 }
-      );
-    }
-
-    // Tek kullanımlık token kontrolü (Replay Attack engelleme)
-    if (usedChallengeNonces.has(nonce)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error:
-            "Bu güvenlik kodu daha önce kullanıldı. Lütfen yeni kodu girin.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Bot hız kontrolü (< 2 saniyede doldurulduysa reddet) ve süre aşımı (10 dk)
-    const elapsed = now - Number(issuedAt);
-    if (elapsed < MIN_FILL_TIME_MS) {
+    if (
+      body.formLoadedAt &&
+      now - Number(body.formLoadedAt) < MIN_FILL_TIME_MS
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -238,78 +118,81 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    if (elapsed > CHALLENGE_TTL_MS) {
+
+    // Katman 3: Google reCAPTCHA v2 Server-Side Doğrulaması
+    const recaptchaToken = (body.recaptchaToken || "").trim();
+    if (!recaptchaToken) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Güvenlik kodunun süresi doldu. Lütfen yeni güvenlik kodunu girin.",
+            "Lütfen 'Ben robot değilim' (reCAPTCHA) kutucuğunu işaretleyiniz.",
         },
         { status: 400 }
       );
     }
 
-    // HMAC-SHA256 imza karşılaştırması (Timing-safe)
-    const expectedSignature = crypto
-      .createHmac("sha256", getCaptchaSecret())
-      .update(`${nonce}:${issuedAt}:${ip}:${userAnswer}`)
-      .digest("hex");
-
-    const sigBufferA = Buffer.from(signature, "hex");
-    const sigBufferB = Buffer.from(expectedSignature, "hex");
-
-    if (
-      sigBufferA.length !== sigBufferB.length ||
-      !crypto.timingSafeEqual(sigBufferA, sigBufferB)
-    ) {
+    // Tek kullanımlık reCAPTCHA token kontrolü (Replay Attack koruması)
+    if (usedRecaptchaTokens.has(recaptchaToken)) {
       return NextResponse.json(
         {
           success: false,
-          error: "Güvenlik sorusu yanıtı hatalı. Lütfen tekrar kontrol edin.",
+          error:
+            "Bu güvenlik doğrulaması daha önce kullanıldı. Lütfen tekrar doğrulayın.",
         },
         { status: 400 }
       );
     }
 
-    // Katman 4: (Opsiyonel) Cloudflare Turnstile Secret Key tanımlıysa sunucu doğrulaması
-    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-    if (turnstileSecret) {
-      const turnstileToken = (body.turnstileToken || "").trim();
-      if (!turnstileToken) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Lütfen Cloudflare güvenlik doğrulamasını tamamlayın.",
-          },
-          { status: 400 }
-        );
-      }
+    const recaptchaSecret =
+      process.env.RECAPTCHA_SECRET_KEY ||
+      (process.env.NODE_ENV !== "production"
+        ? "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+        : "");
 
-      const verifyRes = await fetch(
-        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    if (!recaptchaSecret) {
+      return NextResponse.json(
         {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            secret: turnstileSecret,
-            response: turnstileToken,
-            remoteip: ip,
-          }),
-        }
+          success: false,
+          error:
+            "Sunucu reCAPTCHA gizli anahtarı (RECAPTCHA_SECRET_KEY) yapılandırılmamış.",
+        },
+        { status: 503 }
       );
-      const verifyData = (await verifyRes.json()) as { success?: boolean };
-      if (!verifyData.success) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Cloudflare Turnstile doğrulaması başarısız oldu.",
-          },
-          { status: 400 }
-        );
-      }
     }
 
-    // Katman 5: Sıkı Veri Doğrulama (Validation & Sanitization)
+    const verifyResponse = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          secret: recaptchaSecret,
+          response: recaptchaToken,
+          remoteip: ip,
+        }),
+      }
+    );
+
+    const verifyResult = (await verifyResponse.json()) as {
+      success?: boolean;
+      "error-codes"?: string[];
+    };
+
+    if (!verifyResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Google reCAPTCHA doğrulaması başarısız oldu veya süresi doldu. Lütfen tekrar işaretleyin.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Katman 4: Sıkı Veri Doğrulama (Validation & Sanitization)
     const rawName = stripHeaderBreaks(body.name || "");
     const rawEmail = stripHeaderBreaks(body.email || "");
     const rawTopic = stripHeaderBreaks(body.topic || "Muayene Randevusu");
@@ -352,10 +235,10 @@ export async function POST(request: Request) {
     const safeBranch = rawBranch.slice(0, 100);
 
     // Token'ı kullanıldı olarak işaretle ve IP sayacını artır
-    usedChallengeNonces.set(nonce, now + CHALLENGE_TTL_MS);
+    usedRecaptchaTokens.set(recaptchaToken, now + RATE_LIMIT_WINDOW_MS);
     ipRequestLog.set(ip, [...previousTimestamps, now]);
 
-    // Alıcı e-posta adresi YALNIZCA sunucuda .env'den okunur (info@guneyagizvedis.com -> Gmail'e gönderir)
+    // Katman 5: Kurumsal SMTP Gönderimi (info@guneyagizvedis.com -> Gmail)
     const receiverEmail =
       process.env.CONTACT_RECEIVER_EMAIL || "incecamberat@gmail.com";
 

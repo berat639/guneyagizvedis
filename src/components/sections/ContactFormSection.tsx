@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Script from "next/script";
 import {
   CheckCircle2,
   Calendar,
   Loader2,
   AlertCircle,
-  RefreshCw,
   ShieldCheck,
 } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
@@ -15,9 +14,26 @@ import { TREATMENTS_DATA } from "@/data/treatments";
 
 declare global {
   interface Window {
-    onTurnstileSuccess?: (token: string) => void;
+    grecaptcha?: {
+      render: (
+        container: HTMLElement,
+        parameters: {
+          sitekey: string;
+          callback?: (token: string) => void;
+          "expired-callback"?: () => void;
+          "error-callback"?: () => void;
+          theme?: "light" | "dark";
+        }
+      ) => number;
+      reset: (opt_widget_id?: number) => void;
+    };
+    onRecaptchaLoadCallback?: () => void;
   }
 }
+
+const RECAPTCHA_SITE_KEY =
+  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ||
+  "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
 
 export function ContactFormSection() {
   const [name, setName] = useState("");
@@ -26,55 +42,72 @@ export function ContactFormSection() {
   const [branch, setBranch] = useState(TREATMENTS_DATA[0].title);
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState(""); // Honeypot alanı
+  const [formLoadedAt] = useState<number>(() => Date.now());
 
-  // Sunucu taraflı HMAC-SHA256 Captcha durumu
-  const [captchaImage, setCaptchaImage] = useState<string | null>(null);
-  const [challengeToken, setChallengeToken] = useState<string>("");
-  const [captchaAnswer, setCaptchaAnswer] = useState<string>("");
-  const [loadingCaptcha, setLoadingCaptcha] = useState<boolean>(true);
-
-  // Opsiyonel Cloudflare Turnstile durumu
-  const [turnstileSiteKey, setTurnstileSiteKey] = useState<string | null>(null);
-  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+  const recaptchaContainerRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<number | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const loadCaptcha = useCallback(async () => {
-    setLoadingCaptcha(true);
-    setCaptchaAnswer("");
-    try {
-      const res = await fetch("/api/contact", { cache: "no-store" });
-      if (res.ok) {
-        const data = await res.json();
-        setCaptchaImage(data.captchaImage || null);
-        setChallengeToken(data.challengeToken || "");
-        if (data.turnstileSiteKey) {
-          setTurnstileSiteKey(data.turnstileSiteKey);
-        }
+  const renderRecaptcha = useCallback(() => {
+    if (
+      typeof window !== "undefined" &&
+      window.grecaptcha &&
+      window.grecaptcha.render &&
+      recaptchaContainerRef.current &&
+      widgetIdRef.current === null
+    ) {
+      try {
+        widgetIdRef.current = window.grecaptcha.render(
+          recaptchaContainerRef.current,
+          {
+            sitekey: RECAPTCHA_SITE_KEY,
+            theme: "light",
+            callback: (token: string) => {
+              setRecaptchaToken(token);
+              setErrorMessage(null);
+            },
+            "expired-callback": () => {
+              setRecaptchaToken("");
+            },
+            "error-callback": () => {
+              setRecaptchaToken("");
+            },
+          }
+        );
+      } catch {
+        // Zaten render edilmişse yoksay
       }
-    } catch {
-      // Sessiz hata yönetimi
-    } finally {
-      setLoadingCaptcha(false);
     }
   }, []);
 
   useEffect(() => {
-    loadCaptcha();
-    window.onTurnstileSuccess = (token: string) => {
-      setTurnstileToken(token);
+    window.onRecaptchaLoadCallback = () => {
+      renderRecaptcha();
     };
+    if (window.grecaptcha && window.grecaptcha.render) {
+      renderRecaptcha();
+    }
     return () => {
-      delete window.onTurnstileSuccess;
+      delete window.onRecaptchaLoadCallback;
     };
-  }, [loadCaptcha]);
+  }, [renderRecaptcha]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setErrorMessage(null);
+
+    if (!recaptchaToken) {
+      setErrorMessage(
+        "Lütfen 'Ben robot değilim' (reCAPTCHA) kutucuğunu işaretleyiniz."
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/contact", {
@@ -89,16 +122,18 @@ export function ContactFormSection() {
           branch,
           message,
           website,
-          captchaAnswer,
-          challengeToken,
-          turnstileToken,
+          formLoadedAt,
+          recaptchaToken,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        await loadCaptcha();
+        if (window.grecaptcha && widgetIdRef.current !== null) {
+          window.grecaptcha.reset(widgetIdRef.current);
+        }
+        setRecaptchaToken("");
         throw new Error(
           data.error || "Mesaj gönderilirken bir hata meydana geldi."
         );
@@ -118,6 +153,11 @@ export function ContactFormSection() {
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-9 shadow-2xs">
+      <Script
+        src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoadCallback&render=explicit&hl=tr"
+        strategy="lazyOnload"
+      />
+
       <div className="pb-5 border-b border-slate-100 flex items-center justify-between gap-4">
         <div>
           <span className="text-xs font-extrabold uppercase tracking-wider text-red-700">
@@ -129,7 +169,7 @@ export function ContactFormSection() {
         </div>
         <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-700">
           <ShieldCheck className="w-3.5 h-3.5 text-red-700" />
-          <span>Captcha Korumalı</span>
+          <span>Google reCAPTCHA Korumalı</span>
         </div>
       </div>
 
@@ -157,7 +197,7 @@ export function ContactFormSection() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {errorMessage && (
             <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 flex items-center gap-2.5 text-xs sm:text-sm text-red-800 font-medium">
               <AlertCircle className="w-4 h-4 text-red-700 shrink-0" />
@@ -289,71 +329,12 @@ export function ContactFormSection() {
             />
           </div>
 
-          {/* Sunucu Doğrulamalı Kriptografik Captcha Alanı */}
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
-            <label
-              htmlFor="contact-captcha"
-              className="block text-xs font-bold text-slate-800"
-            >
-              Güvenlik Doğrulaması (Captcha) *
-            </label>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                {captchaImage ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={captchaImage}
-                    alt="Güvenlik Kodu"
-                    width={140}
-                    height={44}
-                    className="h-11 w-[140px] rounded-xl border border-rose-200 select-none"
-                  />
-                ) : (
-                  <div className="h-11 w-[140px] rounded-xl bg-slate-200 animate-pulse" />
-                )}
-
-                <button
-                  type="button"
-                  onClick={loadCaptcha}
-                  disabled={loadingCaptcha}
-                  aria-label="Yeni Güvenlik Kodu Üret"
-                  title="Yeni Kod Üret"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-red-700 hover:text-red-700 transition-colors cursor-pointer"
-                >
-                  <RefreshCw
-                    className={`w-4 h-4 ${loadingCaptcha ? "animate-spin" : ""}`}
-                  />
-                </button>
-              </div>
-
-              <input
-                id="contact-captcha"
-                type="text"
-                inputMode="numeric"
-                required
-                maxLength={6}
-                value={captchaAnswer}
-                onChange={(e) => setCaptchaAnswer(e.target.value)}
-                placeholder="İşlem sonucunu yazınız"
-                className="flex-1 min-w-[180px] rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 focus:border-red-600 focus:outline-none min-h-[44px]"
-              />
-            </div>
-
-            {/* Opsiyonel Cloudflare Turnstile Widget (Eğer .env'de tanımlıysa otomatik aktif olur) */}
-            {turnstileSiteKey && (
-              <div className="pt-2">
-                <Script
-                  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-                  strategy="lazyOnload"
-                />
-                <div
-                  className="cf-turnstile"
-                  data-sitekey={turnstileSiteKey}
-                  data-callback="onTurnstileSuccess"
-                />
-              </div>
-            )}
+          {/* Google reCAPTCHA v2 ("Ben robot değilim") Kutusu */}
+          <div className="pt-1">
+            <div
+              ref={recaptchaContainerRef}
+              className="min-h-[78px] overflow-x-auto"
+            />
           </div>
 
           <button
@@ -367,7 +348,7 @@ export function ContactFormSection() {
                 <span>Doğrulanıyor ve Gönderiliyor...</span>
               </>
             ) : (
-              <span>Güvenli Gönder</span>
+              <span>Gönder</span>
             )}
           </button>
         </form>
