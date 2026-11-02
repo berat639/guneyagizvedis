@@ -146,9 +146,7 @@ export async function POST(request: Request) {
 
     const recaptchaSecret =
       process.env.RECAPTCHA_SECRET_KEY ||
-      (process.env.NODE_ENV !== "production"
-        ? "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-        : "");
+      "6Ld9wQwuAAAAAGRRkNjnLd8-Kcx1WYrrgSvRqL0q";
 
     if (!recaptchaSecret) {
       return NextResponse.json(
