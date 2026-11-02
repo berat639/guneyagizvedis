@@ -15,7 +15,7 @@ import { TREATMENTS_DATA } from "@/data/treatments";
 declare global {
   interface Window {
     grecaptcha?: {
-      render: (
+      render?: (
         container: HTMLElement,
         parameters: {
           sitekey: string;
@@ -25,7 +25,7 @@ declare global {
           theme?: "light" | "dark";
         }
       ) => number;
-      reset: (opt_widget_id?: number) => void;
+      reset?: (opt_widget_id?: number) => void;
     };
     onRecaptchaLoadCallback?: () => void;
   }
@@ -130,7 +130,7 @@ export function ContactFormSection() {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        if (window.grecaptcha && widgetIdRef.current !== null) {
+        if (window.grecaptcha?.reset && widgetIdRef.current !== null) {
           window.grecaptcha.reset(widgetIdRef.current);
         }
         setRecaptchaToken("");

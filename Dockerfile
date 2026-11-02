@@ -1,15 +1,10 @@
-# 1. Bağımlılıklar aşaması
-FROM node:22-alpine AS deps
-RUN apk add --no-cache libc6-compat
+# 1. Bağımlılıklar ve Build aşaması (Debian glibc tabanlı node:22-slim — Tailwind v4 / SWC native binary uyumlu)
+FROM node:22-slim AS builder
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json ./
+RUN npm install --include=optional --no-audit --no-fund
 
-# 2. Build aşaması
-FROM node:22-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ARG NEXT_PUBLIC_SITE_URL="https://www.guneyagizvedis.com"
@@ -24,8 +19,8 @@ ENV NODE_ENV=production
 
 RUN npm run build
 
-# 3. Çalıştırma (Production Standalone) aşaması
-FROM node:22-alpine AS runner
+# 2. Çalıştırma (Production Standalone) aşaması
+FROM node:22-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -46,8 +41,8 @@ ENV SMTP_USER="info@guneyagizvedis.com"
 ENV SMTP_FROM="info@guneyagizvedis.com"
 ENV SMTP_FROM_NAME="Güney Ağız ve Diş Sağlığı"
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid nodejs nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

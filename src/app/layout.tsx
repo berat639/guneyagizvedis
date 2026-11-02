@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { CLINIC_INFO } from "@/data/clinic";
 import { AssistantProvider } from "@/components/assistant/AssistantContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ClinicOrganizationJsonLd } from "@/components/seo/JsonLd";
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(CLINIC_INFO.domain),
@@ -79,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body className={`${jakarta.className} min-h-screen flex flex-col bg-white text-slate-900`}>
+      <body className="font-sans antialiased min-h-screen flex flex-col bg-white text-slate-900">
         <ClinicOrganizationJsonLd />
         <AssistantProvider>
           <Header />
