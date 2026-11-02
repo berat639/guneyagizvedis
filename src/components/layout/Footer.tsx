@@ -138,9 +138,9 @@ export function Footer() {
                 </div>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Ankara Etimesgut&apos;ta modern tanı donanımı, 3D dental
-                tomografi altyapısı, sterilizasyon standartları ve uzman hekim
-                kadromuzla ağız ve diş sağlığı hizmetleri sunuyoruz.
+                Etimesgut Topçu Mahallesi&apos;nde kanal tedavisi, implant,
+                çocuk diş hekimliği, protez, ortodonti ve diş estetiği. Röntgen
+                ve 3D tomografi klinik içinde çekilir.
               </p>
             </div>
 

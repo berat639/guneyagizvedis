@@ -59,7 +59,7 @@ export const RICH_GUIDE_TABS: RichGuideTab[] = [
     relatedTreatmentSlug: "endodonti-kanal-tedavisi",
     relatedTreatmentLabel: "Endodonti (Kanal Tedavisi) Detaylarını İncele",
     image: "/images/klinikoda.png",
-    imageAlt: "Güney Ağız ve Diş Sağlığı Polikliniği Muayene Odası",
+    imageAlt: "Etimesgut Güney Ağız ve Diş Sağlığı diş tedavi ünitesi",
   },
   {
     id: "dijital-radyoloji",
@@ -214,7 +214,7 @@ export const GENERAL_FAQS: GeneralFAQItem[] = [
     category: "Koruyucu Bakım",
     question: "Diş taşı temizliği (detertraj) diş minesine zarar verir mi?",
     answer:
-      "Hayır. Uzman diş hekimi tarafından ultrasonik cihazlarla yapılan diş taşı temizliği diş minesine zarar vermez; aksine diş eti iltihabına, diş eti çekilmesine ve kemik kaybına yol açan plak ve tartarın uzaklaştırılmasını sağlar.",
+      "Hayır. Ultrasonik cihazlarla yapılan diş taşı temizliği mineye zarar vermez; diş eti iltihabına, diş eti çekilmesine ve kemik kaybına yol açan plak ve tartarı uzaklaştırır. İşlem sonrası birkaç gün hafif hassasiyet ve diş aralarında boşluk hissi olabilir; bu, taşın doldurduğu alanın açılmasından kaynaklanır.",
   },
   {
     category: "Periyodik Kontrol",

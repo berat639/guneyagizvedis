@@ -13,11 +13,11 @@ import { CLINIC_INFO } from "@/data/clinic";
 
 export function HeroSection() {
   const simplePillars = [
-    { title: "Uzman Diş Hekimi Kadrosu", icon: UserCheck },
-    { title: "Steril ve Güvenli Ortam", icon: ShieldCheck },
-    { title: "Modern Teknoloji", icon: ScanLine },
-    { title: "Kişiye Özel Yaklaşım", icon: ClipboardCheck },
-    { title: "Hızlı ve Kolay Randevu", icon: Calendar },
+    { title: "Klinik İçinde Röntgen & 3D Tomografi", icon: ScanLine },
+    { title: "Otoklav Sterilizasyonu", icon: ShieldCheck },
+    { title: "Çocuk ve Yetişkin Tedavileri", icon: UserCheck },
+    { title: "Tedavi Planı Önceden Açıklanır", icon: ClipboardCheck },
+    { title: "Online Randevu", icon: Calendar },
   ];
 
   return (
@@ -29,7 +29,7 @@ export function HeroSection() {
           <div className="max-w-xl space-y-5 sm:space-y-6">
             <div className="inline-flex items-center gap-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700">
               <span className="h-0.5 w-8 bg-red-700 rounded-full" />
-              <span>ETİMESGUT&apos;TA DİŞ POLİKLİNİĞİ</span>
+              <span>ETİMESGUT DİŞ HEKİMİ · TOPÇU MAHALLESİ</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.12]">
@@ -40,9 +40,10 @@ export function HeroSection() {
             </h1>
 
             <p className="text-sm sm:text-lg text-slate-700 leading-relaxed">
-              Deneyimli diş hekimi kadromuz, modern teknolojilerimiz ve hasta
-              odaklı yaklaşımımızla ağız ve diş sağlığınız için kapsamlı ve
-              konforlu hizmet sunuyoruz.
+              Kanal tedavisi, implant, çocuk diş hekimliği, zirkonyum ve
+              protez, ortodonti ve diş estetiği tek çatı altında. Röntgen ve 3D
+              tomografi klinik içinde çekilir; tedavi planı ve seans sayısı
+              başlamadan önce size anlatılır.
             </p>
 
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
@@ -69,7 +70,7 @@ export function HeroSection() {
         <div className="relative lg:col-span-7 min-h-[300px] sm:min-h-[440px] lg:min-h-full bg-slate-100 overflow-hidden">
           <Image
             src={CLINIC_INFO.images.heroRoom}
-            alt="Özel Güney Ağız ve Diş Sağlığı Polikliniği Muayene Odası"
+            alt="Etimesgut Güney Ağız ve Diş Sağlığı Polikliniği diş tedavi ünitesi"
             fill
             priority
             fetchPriority="high"

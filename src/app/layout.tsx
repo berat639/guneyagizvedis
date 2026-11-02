@@ -10,23 +10,22 @@ export const metadata: Metadata = {
   metadataBase: new URL(CLINIC_INFO.domain),
   title: {
     default:
-      "Özel Güney Ağız ve Diş Sağlığı Polikliniği | Etimesgut Ankara Diş Kliniği",
+      "Etimesgut Diş Hekimi | Özel Güney Ağız ve Diş Sağlığı Polikliniği",
     template: "%s | Güney Ağız ve Diş Sağlığı",
   },
   description:
-    "Ankara Etimesgut Topçu Mahallesi'nde hizmet veren Özel Güney Ağız ve Diş Sağlığı Polikliniği; Endodonti (Kanal Tedavisi), İmplant, Pedodonti, Protez, Ortodonti ve Diş Estetiği alanlarında bilgilendirme ve tanı hizmetleri.",
+    "Etimesgut Topçu Mahallesi'nde diş polikliniği: kanal tedavisi, implant, çocuk diş hekimliği, zirkonyum ve protez, ortodonti, diş estetiği. Klinik içinde panoramik röntgen ve 3D tomografi.",
   keywords: [
-    "güney ağız ve diş sağlığı",
-    "özel güney ağız ve diş sağlığı polikliniği",
+    "etimesgut diş hekimi",
     "etimesgut diş kliniği",
-    "etimesgut ağız ve diş sağlığı",
-    "ankara diş polikliniği",
-    "endodonti kanal tedavisi",
-    "implant tedavisi etimesgut",
-    "pedodonti çocuk diş hekimliği",
-    "protez tedavisi",
-    "ortodonti",
-    "diş estetiği",
+    "etimesgut ağız ve diş sağlığı polikliniği",
+    "güney ağız ve diş sağlığı",
+    "etimesgut implant",
+    "etimesgut kanal tedavisi",
+    "etimesgut çocuk diş hekimi",
+    "etimesgut ortodonti",
+    "etimesgut zirkonyum",
+    "topçu mahallesi diş hekimi",
   ],
   alternates: {
     canonical: "/",
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
     title:
       "Özel Güney Ağız ve Diş Sağlığı Polikliniği | Etimesgut / Ankara",
     description:
-      "Etimesgut'ta modern 3D dental tomografi altyapısı, steril muayene üniteleri ve uzman diş hekimi kadrosuyla ağız ve diş sağlığı hizmetleri.",
+      "Etimesgut Topçu Mahallesi'nde kanal tedavisi, implant, çocuk diş hekimliği, protez, ortodonti ve diş estetiği. Klinik içinde röntgen ve 3D tomografi.",
     images: [
       {
         url: CLINIC_INFO.images.heroRoom,

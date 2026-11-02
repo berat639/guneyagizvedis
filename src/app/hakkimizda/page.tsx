@@ -34,34 +34,34 @@ export default function AboutPage() {
       alt: "Özel Güney Ağız ve Diş Sağlığı Polikliniği Dış Cephe Görünümü",
     },
     {
-      title: "Ferah ve Aydınlık Muayene Odası (Klinik 1)",
-      subtitle: "Modern Dental Ünite ve Konfor",
+      title: "Muayene ve Tedavi Odalarımız",
+      subtitle: "Gün ışığı alan, ferah çalışma alanı",
       description:
-        "Gün ışığı alan geniş cam cephesi, modern dental ünitesi ve ergonomi standartlarıyla hastalarımızın tedavi sürecini rahat bir atmosferde geçirmesini amaçlar.",
+        "Muayene, dolgu, kanal tedavisi ve diş taşı temizliği gibi rutin işlemler; her hasta sonrası dezenfekte edilen ünitelerde yapılır.",
       image: CLINIC_INFO.images.heroRoom,
-      alt: "Güney Ağız ve Diş Sağlığı Polikliniği Klinik 1 Muayene Odası",
+      alt: "Etimesgut Güney Ağız ve Diş Sağlığı Polikliniği diş tedavi ünitesi",
     },
     {
-      title: "Bağımsız Tedavi Ünitesi (Klinik 2)",
-      subtitle: "İzole ve Hijyenik Klinik Mimarisi",
+      title: "Cam Bölmeli Tedavi Alanı",
+      subtitle: "Mahremiyet ve hijyen",
       description:
-        "Bağımsız cam bölmeli odalarımızda endodontik, protetik, pedodontik, ortodontik ve restoratif diş tedavileri yüksek hijyen standartlarında uygulanmaktadır.",
+        "Cam bölmeli odalar, tedavi sırasında hasta mahremiyetini korurken alanların ayrı ayrı temizlenip dezenfekte edilmesini kolaylaştırır.",
       image: CLINIC_INFO.images.clinicRoom2,
-      alt: "Güney Ağız ve Diş Sağlığı Polikliniği Klinik 2 Muayene Odası",
+      alt: "Cam bölmeli diş tedavi odası, Güney Ağız ve Diş Sağlığı Etimesgut",
     },
     {
-      title: "Geniş ve Konforlu Muayene Odası (Klinik 3)",
-      subtitle: "Ergonomik Hasta Ünitesi & Steril Çalışma Alanı",
+      title: "Çocuk ve Yetişkin Hastalar İçin Tedavi Alanı",
+      subtitle: "Geniş ve rahat ünite",
       description:
-        "Ferah iç hacmi, modern aydınlatma sistemi ve tam donanımlı dental ünitesi ile hem yetişkin hem de çocuk hastalarımız için konforlu tedavi alanı.",
+        "Ebeveynin çocuğunun yanında kalabileceği genişlikte tasarlanan alan, uzun süren protez ve estetik seanslarında da rahatlık sağlar.",
       image: CLINIC_INFO.images.clinicRoom3,
-      alt: "Güney Ağız ve Diş Sağlığı Polikliniği Klinik 3 Geniş Muayene Odası",
+      alt: "Geniş diş tedavi odası, Güney Ağız ve Diş Sağlığı Etimesgut",
     },
     {
-      title: "3D Dental Tomografi ve Dijital Radyoloji Ünitesi",
-      subtitle: "Üç Boyutlu Görüntüleme & Panoramik Röntgen",
+      title: "Panoramik Röntgen ve 3D Dental Tomografi",
+      subtitle: "Klinik içinde görüntüleme",
       description:
-        "İmplant uygulamaları, kanal tedavisi ve ortodontik analizlerde çene kemiğini ve diş köklerini üç boyutlu inceleme imkanı sunan dijital radyoloji altyapımız.",
+        "Röntgen ve tomografi çekimi klinik içinde yapıldığı için başka bir merkeze gitmeniz gerekmez; implant, gömülü diş ve kanal tedavisi planlaması aynı gün değerlendirilebilir.",
       image: CLINIC_INFO.images.tomography,
       alt: "Güney Ağız ve Diş Sağlığı 3D Dental Tomografi ve Panoramik Röntgen Cihazı",
     },
@@ -70,8 +70,8 @@ export default function AboutPage() {
   const sterilizationItems = [
     {
       icon: <ShieldCheck className="w-6 h-6 text-red-700" />,
-      title: "Otoklav Sterilizasyon Zinciri",
-      text: "Kliniğimizde kullanılan tüm cerrahi ve el aletleri, uluslararası protokoller doğrultusunda ultrasonik olarak temizlenmekte, paketlenmekte ve B sınıfı otoklav cihazlarında sterilize edilmektedir.",
+      title: "Otoklav Sterilizasyonu",
+      text: "Tekrar kullanılan tüm el aletleri temizlendikten sonra paketlenir ve otoklavda sterilize edilir. Paketler hastanın önünde açılır.",
     },
     {
       icon: <CheckCircle2 className="w-6 h-6 text-red-700" />,
@@ -120,10 +120,9 @@ export default function AboutPage() {
                 yelpazede tanı ve tedavi hizmeti sunmaktadır.
               </p>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                Deneyimli diş hekimi kadromuz, güler yüzlü yardımcı sağlık
-                personelimiz ve 3 boyutlu görüntüleme teknolojilerimizle; her
-                yaş grubundan hastamızın konforunu ve ağız sağlığını ön planda
-                tutuyoruz.
+                Muayenede gerekli görülen panoramik röntgen ve 3D dental
+                tomografi çekimleri klinik içinde yapılır; tedavi seçenekleri,
+                seans sayısı ve süreç muayene sonrasında size açıkça anlatılır.
               </p>
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <a
@@ -231,11 +230,11 @@ export default function AboutPage() {
                 <span>KLİNİĞİMİZDEN GÖRÜNÜMLER</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                Muayene Odalarımız ve Teknolojik Donanımımız
+                Kliniğimiz ve Görüntüleme Altyapımız
               </h2>
               <p className="text-sm sm:text-base text-slate-700 mt-2">
-                Etimesgut polikliniğimizde yer alan modern tedavi ünitelerimiz
-                ve 3 boyutlu görüntüleme altyapımız.
+                Topçu Mahallesi&apos;ndeki polikliniğimizin tedavi alanları ve
+                klinik içinde bulunan röntgen/tomografi cihazı.
               </p>
             </div>
             <Link

@@ -12,10 +12,10 @@ import { CLINIC_INFO } from "@/data/clinic";
 
 export function AboutAndTechSection() {
   const aboutFeatures = [
-    "Deneyimli ve Uzman Kadro",
-    "Kişiye Özel Tedavi Planlaması",
-    "Modern ve Hijyenik Klinik",
-    "Etimesgut'ta Merkezi Konum",
+    "Klinik İçinde Röntgen ve 3D Tomografi",
+    "Çocuk ve Yetişkin Diş Tedavileri",
+    "Otoklav Sterilizasyonu",
+    "Topçu Mahallesi, Etimesgut",
   ];
 
   const techFeatures = [
@@ -59,9 +59,10 @@ export function AboutAndTechSection() {
               </h2>
 
               <p className="text-sm sm:text-base text-slate-700 mt-4 leading-relaxed">
-                Etimesgut&apos;ta ağız ve diş sağlığını ön planda tutan; modern
-                donanımı, tecrübeli ekibi ve hasta odaklı hizmet anlayışıyla
-                tanı ve tedavi sunan bir diş polikliniğiyiz.
+                Etimesgut Topçu Mahallesi&apos;nde kanal tedavisi, implant,
+                çocuk diş hekimliği, protez, ortodonti ve diş estetiği
+                alanlarında muayene ve tedavi hizmeti veren bir diş
+                polikliniğiyiz.
               </p>
 
               <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -106,8 +107,7 @@ export function AboutAndTechSection() {
                   <span>{CLINIC_INFO.officialTitle}</span>
                 </div>
                 <p className="text-xs text-slate-700 mt-1">
-                  Modern klinik mimarisi, ileri tanı teknolojileri ve uzman
-                  hekim kadromuzla Etimesgut&apos;ta hizmetinizdeyiz.
+                  Topçu Mah. 1512. Cad. No:52, Etimesgut / Ankara
                 </p>
               </div>
             </div>
@@ -116,7 +116,7 @@ export function AboutAndTechSection() {
               <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[180px] sm:min-h-[180px] group">
                 <Image
                   src={CLINIC_INFO.images.clinicRoom2}
-                  alt="Güney Ağız ve Diş Sağlığı Klinik 2 Tedavi Odası"
+                  alt="Cam bölmeli diş tedavi odası, Güney Ağız ve Diş Sağlığı Etimesgut"
                   fill
                   quality={75}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 25vw"
@@ -126,7 +126,7 @@ export function AboutAndTechSection() {
                 <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-white/95 backdrop-blur-md px-3.5 py-2.5 shadow-md border border-white">
                   <div className="flex items-center gap-1.5 text-xs font-extrabold text-slate-900">
                     <ShieldCheck className="w-3.5 h-3.5 text-red-700 shrink-0" />
-                    <span>Bağımsız Tedavi Ünitesi (Klinik 2)</span>
+                    <span>Cam Bölmeli Tedavi Odaları</span>
                   </div>
                 </div>
               </div>
@@ -134,7 +134,7 @@ export function AboutAndTechSection() {
               <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-sm min-h-[180px] sm:min-h-[180px] group">
                 <Image
                   src={CLINIC_INFO.images.clinicRoom3}
-                  alt="Güney Ağız ve Diş Sağlığı Klinik 3 Geniş Muayene ve Tedavi Odası"
+                  alt="Geniş diş tedavi odası, Güney Ağız ve Diş Sağlığı Etimesgut"
                   fill
                   quality={75}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 25vw"
@@ -144,7 +144,7 @@ export function AboutAndTechSection() {
                 <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-white/95 backdrop-blur-md px-3.5 py-2.5 shadow-md border border-white">
                   <div className="flex items-center gap-1.5 text-xs font-extrabold text-slate-900">
                     <ShieldCheck className="w-3.5 h-3.5 text-red-700 shrink-0" />
-                    <span>Modern Muayene Odası (Klinik 3)</span>
+                    <span>Çocuk ve Yetişkin Tedavi Alanı</span>
                   </div>
                 </div>
               </div>
