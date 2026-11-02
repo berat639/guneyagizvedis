@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2, MessageCircle, Phone } from "lucide-react";
+import { CheckCircle2, Calendar } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 import { TREATMENTS_DATA } from "@/data/treatments";
 
 export function ContactFormSection() {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [topic, setTopic] = useState("Muayene Randevusu");
   const [branch, setBranch] = useState(TREATMENTS_DATA[0].title);
   const [message, setMessage] = useState("");
@@ -18,18 +18,10 @@ export function ContactFormSection() {
     setIsSubmitted(true);
   };
 
-  const whatsappUrl = `https://wa.me/${
-    CLINIC_INFO.contact.whatsappNumber
-  }?text=${encodeURIComponent(
-    `Merhaba, Özel Güney Ağız ve Diş Sağlığı Polikliniği İletişim sayfasından ulaşıyorum.\nAd Soyad: ${
-      name || "-"
-    }\nKonu: ${topic}\nBranş: ${branch}\nMesaj: ${message || "-"}`
-  )}`;
-
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-9 shadow-2xs">
       <div className="pb-5 border-b border-slate-100">
-        <span className="text-xs font-extrabold uppercase tracking-wider text-red-600">
+        <span className="text-xs font-extrabold uppercase tracking-wider text-red-700">
           BİZE YAZIN
         </span>
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
@@ -47,24 +39,16 @@ export function ContactFormSection() {
           </h3>
           <p className="text-xs sm:text-sm text-emerald-800 max-w-lg mx-auto leading-relaxed">
             Sayın <strong>{name}</strong>, talebiniz kaydedilmiştir. Dilerseniz
-            aşağıdaki kanallardan doğrudan kliniğimize ulaşabilirsiniz:
+            dijital asistan bağlantımız üzerinden de doğrudan randevu ve bilgi
+            alabilirsiniz:
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs sm:text-sm font-bold text-white hover:bg-emerald-700 transition-colors"
+              href={CLINIC_INFO.assistantUrl}
+              className="inline-flex items-center gap-2 rounded-xl bg-red-700 px-5 py-3 text-xs sm:text-sm font-bold text-white hover:bg-red-800 transition-colors"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp ile Gönder</span>
-            </a>
-            <a
-              href={CLINIC_INFO.contact.phoneHref}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-xs sm:text-sm font-bold text-white hover:bg-slate-800 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              <span>Hemen Ara: {CLINIC_INFO.contact.phoneDisplay}</span>
+              <Calendar className="w-4 h-4" />
+              <span>Asistan ile Randevu & Bilgi Al</span>
             </a>
           </div>
         </div>
@@ -91,18 +75,17 @@ export function ContactFormSection() {
 
             <div>
               <label
-                htmlFor="contact-phone"
+                htmlFor="contact-email"
                 className="block text-xs font-bold text-slate-700 mb-1.5"
               >
-                Telefon Numaranız *
+                E-Posta Adresiniz
               </label>
               <input
-                id="contact-phone"
-                type="tel"
-                required
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="05XX XXX XX XX"
+                id="contact-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="ornek@eposta.com"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-xs sm:text-sm text-slate-900 focus:border-red-600 focus:bg-white focus:outline-none"
               />
             </div>

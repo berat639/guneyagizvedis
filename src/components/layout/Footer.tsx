@@ -3,11 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   MapPin,
-  Phone,
-  Clock,
   Headset,
   ArrowRight,
   CalendarCheck,
+  Navigation,
 } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 import { TREATMENTS_DATA } from "@/data/treatments";
@@ -75,44 +74,16 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-red-700">
-                <Phone className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                  Telefon
-                </h3>
-                <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <a
-                    href={CLINIC_INFO.contact.phoneHref}
-                    className="py-1 text-sm font-extrabold text-slate-900 hover:text-red-700 transition-colors"
-                  >
-                    {CLINIC_INFO.contact.phoneDisplay}
-                  </a>
-                  <span className="text-slate-400">•</span>
-                  <a
-                    href={CLINIC_INFO.contact.mobileHref}
-                    className="py-1 text-sm font-bold text-slate-800 hover:text-red-700 transition-colors"
-                  >
-                    {CLINIC_INFO.contact.mobileDisplay}
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-red-700">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                  Çalışma Saatleri
-                </h3>
-                <p className="text-sm font-semibold text-slate-900 mt-0.5">
-                  {CLINIC_INFO.workingHours.weekdaysAndSaturday}
-                </p>
-              </div>
+            <div className="pt-2">
+              <a
+                href={CLINIC_INFO.address.googleMapsDirectionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 hover:border-red-700 hover:text-red-700 transition-colors min-h-[44px]"
+              >
+                <Navigation className="w-4 h-4 text-red-700" />
+                <span>Google Haritalar Yol Tarifi</span>
+              </a>
             </div>
           </div>
 

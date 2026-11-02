@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { MapPin, Clock, Phone, Menu, X, Calendar } from "lucide-react";
+import { MapPin, Menu, X, Calendar, Navigation } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 
 export function Header() {
@@ -33,17 +33,14 @@ export function Header() {
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-1.5 text-slate-700 font-medium shrink-0">
-            <Clock className="w-3.5 h-3.5 text-red-700" />
-            <span>{CLINIC_INFO.workingHours.weekdaysAndSaturday}</span>
-          </div>
-
           <a
-            href={CLINIC_INFO.contact.phoneHref}
-            className="flex items-center gap-1.5 font-bold text-slate-900 hover:text-red-700 transition-colors shrink-0 min-h-[28px]"
+            href={CLINIC_INFO.address.googleMapsDirectionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-1.5 font-bold text-slate-900 hover:text-red-700 transition-colors shrink-0 min-h-[28px]"
           >
-            <Phone className="w-3.5 h-3.5 text-red-700" />
-            <span>{CLINIC_INFO.contact.phoneDisplay}</span>
+            <Navigation className="w-3.5 h-3.5 text-red-700" />
+            <span>Yol Tarifi Al</span>
           </a>
         </div>
       </div>
@@ -165,20 +162,13 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="pt-2 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="pt-2 border-t border-slate-100">
             <a
               href={CLINIC_INFO.assistantUrl}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-red-700 px-4 py-3 text-sm font-bold text-white min-h-[48px]"
             >
               <Calendar className="w-4 h-4" />
               <span>Asistan ile Randevu & Bilgi Al</span>
-            </a>
-            <a
-              href={CLINIC_INFO.contact.phoneHref}
-              className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-800 min-h-[48px]"
-            >
-              <Phone className="w-4 h-4 text-red-700" />
-              <span>Hemen Ara: {CLINIC_INFO.contact.phoneDisplay}</span>
             </a>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Stethoscope, Phone, CheckCircle2, ArrowRight } from "lucide-react";
+import { Stethoscope, CheckCircle2, ArrowRight } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 import { TREATMENTS_DATA } from "@/data/treatments";
 import { TreatmentsGrid } from "@/components/sections/TreatmentsGrid";
@@ -59,16 +59,6 @@ export default function TreatmentsPage() {
                     <ArrowRight className="w-3.5 h-3.5 text-red-700" />
                   </Link>
                 ))}
-              </div>
-
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <a
-                  href={CLINIC_INFO.contact.phoneHref}
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-3 text-xs sm:text-sm font-bold text-slate-900 hover:border-red-700 hover:text-red-700 transition-colors min-h-[44px]"
-                >
-                  <Phone className="w-4 h-4 text-red-700" />
-                  <span>{CLINIC_INFO.contact.phoneDisplay}</span>
-                </a>
               </div>
             </div>
 

@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import {
   MapPin,
-  Phone,
-  Clock,
   Navigation,
   Building2,
   CheckCircle2,
+  Calendar,
 } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
   title:
     "İletişim, Adres ve Randevu | Özel Güney Ağız ve Diş Sağlığı Etimesgut",
   description:
-    "Ankara Etimesgut Topçu Mahallesi 1512. Cadde No:52 adresinde bulunan Özel Güney Ağız ve Diş Sağlığı Polikliniği iletişim bilgileri, çalışma saatleri, yol tarifi ve iletişim formu.",
+    "Ankara Etimesgut Topçu Mahallesi 1512. Cadde No:52 adresinde bulunan Özel Güney Ağız ve Diş Sağlığı Polikliniği adres bilgileri, yol tarifi ve iletişim formu.",
   alternates: {
     canonical: "/iletisim",
   },
@@ -46,9 +45,9 @@ export default function ContactPage() {
                 <span className="text-red-700">Randevu</span>
               </h1>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                Etimesgut Topçu Mahallesi&apos;ndeki polikliniğimize telefonla,
-                dijital asistan bağlantımızla veya aşağıdaki iletişim formumuz
-                üzerinden kolayca ulaşabilirsiniz.
+                Etimesgut Topçu Mahallesi&apos;ndeki polikliniğimize dijital
+                asistan bağlantımızla veya aşağıdaki iletişim formumuz üzerinden
+                kolayca ulaşabilirsiniz.
               </p>
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <a
@@ -116,73 +115,36 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              {/* Phone Numbers Box */}
+              {/* Online Appointment & Assistant Box */}
               <div className="rounded-3xl border border-slate-200 bg-slate-50/60 p-6 space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white border border-rose-100 text-red-700 shadow-2xs">
-                    <Phone className="w-5 h-5" />
+                    <Calendar className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Telefon Hatlarımız
+                      Dijital Asistan
                     </span>
                     <h2 className="text-base font-extrabold text-slate-900">
-                      Doğrudan İletişim
+                      Randevu ve Bilgi Alın
                     </h2>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <a
-                    href={CLINIC_INFO.contact.phoneHref}
-                    className="rounded-2xl bg-white border border-slate-200 p-3.5 hover:border-red-700 transition-colors min-h-[56px] flex flex-col justify-center"
-                  >
-                    <span className="text-[11px] font-semibold text-slate-600 block">
-                      Sabit Klinik Hattı
-                    </span>
-                    <span className="text-sm font-extrabold text-slate-900 mt-0.5 block">
-                      {CLINIC_INFO.contact.phoneDisplay}
-                    </span>
-                  </a>
-                  <a
-                    href={CLINIC_INFO.contact.mobileHref}
-                    className="rounded-2xl bg-white border border-slate-200 p-3.5 hover:border-red-700 transition-colors min-h-[56px] flex flex-col justify-center"
-                  >
-                    <span className="text-[11px] font-semibold text-slate-600 block">
-                      Mobil İletişim Hattı
-                    </span>
-                    <span className="text-sm font-extrabold text-red-700 mt-0.5 block">
-                      {CLINIC_INFO.contact.mobileDisplay}
-                    </span>
-                  </a>
-                </div>
-              </div>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  Muayene randevusu oluşturmak ve tedavi süreçlerimiz hakkında
+                  bilgi almak için asistan sistemimize bağlanabilirsiniz.
+                </p>
 
-              {/* Working Hours Box */}
-              <div className="rounded-3xl border border-slate-200 bg-slate-50/60 p-6 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white border border-rose-100 text-red-700 shadow-2xs">
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Çalışma Saatlerimiz
-                    </span>
-                    <h2 className="text-base font-extrabold text-slate-900">
-                      Hizmet Gün ve Saatleri
-                    </h2>
-                  </div>
+                <div className="pt-1">
+                  <a
+                    href={CLINIC_INFO.assistantUrl}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-red-700 px-6 py-3 text-xs sm:text-sm font-bold text-white hover:bg-red-800 transition-colors min-h-[44px]"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>Asistan ile Randevu & Bilgi Al</span>
+                  </a>
                 </div>
-                <ul className="space-y-2 pt-1 text-xs sm:text-sm text-slate-800">
-                  <li className="flex items-center justify-between font-bold">
-                    <span>Pazartesi – Cumartesi:</span>
-                    <span className="text-red-700">09:00 – 19:00</span>
-                  </li>
-                  <li className="flex items-center justify-between text-slate-600">
-                    <span>Pazar:</span>
-                    <span>Kapalı</span>
-                  </li>
-                </ul>
 
                 <div className="pt-3 border-t border-slate-200/80 space-y-1.5 text-xs text-slate-700">
                   <div className="flex items-center gap-2">

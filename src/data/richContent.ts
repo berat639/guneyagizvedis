@@ -223,9 +223,9 @@ export const GENERAL_FAQS: GeneralFAQItem[] = [
       "Evet. Diş çürükleri ve diş eti hastalıkları başlangıç aşamasında ağrı yapmaz. 6 ayda bir yapılan rutin kontroller, sorunların henüz başlangıç evresindeyken kolay ve koruyucu yöntemlerle çözülmesine yardımcı olur.",
   },
   {
-    category: "Çalışma Saatleri",
-    question: "Polikliniğiniz hangi gün ve saatlerde hizmet vermektedir?",
+    category: "Randevu & Planlama",
+    question: "Muayene ve tedavi randevusu nasıl oluşturulur?",
     answer:
-      "Özel Güney Ağız ve Diş Sağlığı Polikliniği, Etimesgut Topçu Mahallesi 1512. Cadde No:52 adresinde Pazartesi'den Cumartesi'ye 09:00 – 19:00 saatleri arasında hizmet vermektedir.",
+      "Web sitemizde yer alan 'Asistan ile Randevu & Bilgi Al' bağlantısı veya iletişim formumuz üzerinden başvurunuzu ileterek size uygun muayene ve kontrol planlamasını kolayca oluşturabilirsiniz.",
   },
 ];

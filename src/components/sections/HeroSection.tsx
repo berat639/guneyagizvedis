@@ -1,14 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
-  Phone,
   ArrowRight,
   Calendar,
   UserCheck,
   ShieldCheck,
   ScanLine,
   ClipboardCheck,
-  Clock,
 } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 
@@ -56,13 +55,12 @@ export function HeroSection() {
                 <ArrowRight className="w-4 h-4 shrink-0" />
               </a>
 
-              <a
-                href={CLINIC_INFO.contact.phoneHref}
+              <Link
+                href="/tedavilerimiz"
                 className="inline-flex items-center justify-center gap-2.5 rounded-full border-2 border-slate-300 bg-white px-7 py-4 text-sm sm:text-base font-bold text-slate-900 hover:border-red-700 hover:text-red-700 transition-colors min-h-[52px]"
               >
-                <Phone className="w-5 h-5 text-slate-800 shrink-0" />
-                <span>Hemen Ara</span>
-              </a>
+                <span>Tedavilerimizi İnceleyin</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -82,21 +80,6 @@ export function HeroSection() {
 
           {/* Soft Gradient Left Transition on Desktop */}
           <div className="hidden lg:block absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none" />
-
-          {/* Minimal Working Hours Badge in Bottom Right */}
-          <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 rounded-2xl bg-white/95 backdrop-blur-md px-4 py-3 shadow-lg border border-white flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-red-700">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="block text-xs font-extrabold text-slate-900">
-                Çalışma Saatlerimiz
-              </span>
-              <span className="block text-xs font-medium text-slate-700 mt-0.5">
-                {CLINIC_INFO.workingHours.weekdaysAndSaturday}
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 

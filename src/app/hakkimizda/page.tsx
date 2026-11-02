@@ -9,7 +9,6 @@ import {
   Target,
   Eye,
   HeartHandshake,
-  Phone,
   Sparkles,
 } from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
@@ -133,13 +132,12 @@ export default function AboutPage() {
                 >
                   <span>Randevu & Bilgi Al</span>
                 </a>
-                <a
-                  href={CLINIC_INFO.contact.phoneHref}
+                <Link
+                  href="/tedavilerimiz"
                   className="inline-flex items-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-3 text-xs sm:text-sm font-bold text-slate-900 hover:border-red-700 hover:text-red-700 transition-colors min-h-[44px]"
                 >
-                  <Phone className="w-4 h-4 text-red-700" />
-                  <span>{CLINIC_INFO.contact.phoneDisplay}</span>
-                </a>
+                  <span>Tedavilerimizi İnceleyin</span>
+                </Link>
               </div>
             </div>
 

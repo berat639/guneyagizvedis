@@ -29,17 +29,7 @@ export const CLINIC_INFO = {
       "https://www.google.com/maps/dir/?api=1&destination=Top%C3%A7u+Mahallesi+1512.+Cadde+No:52+Etimesgut+Ankara",
   },
   contact: {
-    phoneDisplay: "(0312) 261 00 01",
-    phoneHref: "tel:+903122610001",
-    mobileDisplay: "0507 172 22 39",
-    mobileHref: "tel:+905071722239",
-    whatsappNumber: "905071722239",
     email: "bilgi@guneyagizvedis.com",
-  },
-  workingHours: {
-    weekdaysAndSaturday: "Pzt – Cmt: 09:00 – 19:00",
-    sunday: "Pazar: Kapalı",
-    schemaOpeningHours: ["Mo-Sa 09:00-19:00"],
   },
   compliance: {
     lastUpdated: "02 Kasım 2026",

@@ -27,7 +27,6 @@ export function ClinicOrganizationJsonLd() {
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.clinicRoom3}`,
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.tomography}`,
     ],
-    telephone: "+90-312-261-00-01",
     email: CLINIC_INFO.contact.email,
     address: {
       "@type": "PostalAddress",
@@ -42,21 +41,6 @@ export function ClinicOrganizationJsonLd() {
       latitude: CLINIC_INFO.address.coordinates.lat,
       longitude: CLINIC_INFO.address.coordinates.lng,
     },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        opens: "09:00",
-        closes: "19:00",
-      },
-    ],
     medicalSpecialty: [
       "Dentistry",
       "Endodontics",

@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   CheckCircle2,
   ArrowRight,
-  Phone,
   ShieldCheck,
   HelpCircle,
   Sparkles,
@@ -130,16 +129,6 @@ export default async function TreatmentDetailPage({
               <p className="text-sm sm:text-base font-medium text-slate-700 leading-relaxed">
                 {treatment.shortSummary}
               </p>
-
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <a
-                  href={CLINIC_INFO.contact.phoneHref}
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-3 text-xs sm:text-sm font-bold text-slate-900 hover:border-red-700 hover:text-red-700 transition-colors min-h-[44px]"
-                >
-                  <Phone className="w-4 h-4 text-red-700" />
-                  <span>{CLINIC_INFO.contact.phoneDisplay}</span>
-                </a>
-              </div>
             </div>
 
             <div className="lg:col-span-5">
@@ -372,16 +361,6 @@ export default async function TreatmentDetailPage({
                   treatmentSlug={treatment.slug}
                   className="w-full min-h-[48px]"
                 />
-
-                <div className="pt-3 border-t border-white/15 flex items-center justify-between text-xs">
-                  <span className="text-slate-200">Klinik Telefon:</span>
-                  <a
-                    href={CLINIC_INFO.contact.phoneHref}
-                    className="font-extrabold text-white hover:text-rose-200"
-                  >
-                    {CLINIC_INFO.contact.phoneDisplay}
-                  </a>
-                </div>
               </div>
 
               {/* Other Treatments Navigation Card */}
