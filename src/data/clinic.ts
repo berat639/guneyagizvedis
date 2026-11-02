@@ -30,10 +30,6 @@ export const CLINIC_INFO = {
     googleMapsDirectionsUrl:
       "https://www.google.com/maps/dir/?api=1&destination=Top%C3%A7u+Mahallesi+1512.+Cadde+No:52+Etimesgut+Ankara",
   },
-  contact: {
-    email:
-      process.env.NEXT_PUBLIC_CONTACT_EMAIL || "incecamberat@gmail.com",
-  },
   compliance: {
     lastUpdated: "02 Kasım 2026",
     lastUpdatedISO: "2026-11-02",

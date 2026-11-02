@@ -27,7 +27,6 @@ export function ClinicOrganizationJsonLd() {
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.clinicRoom3}`,
       `${CLINIC_INFO.domain}${CLINIC_INFO.images.tomography}`,
     ],
-    email: CLINIC_INFO.contact.email,
     address: {
       "@type": "PostalAddress",
       streetAddress: CLINIC_INFO.address.street,

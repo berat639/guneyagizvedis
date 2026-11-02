@@ -1,9 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import { CheckCircle2, Calendar, Loader2, AlertCircle } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import Script from "next/script";
+import {
+  CheckCircle2,
+  Calendar,
+  Loader2,
+  AlertCircle,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react";
 import { CLINIC_INFO } from "@/data/clinic";
 import { TREATMENTS_DATA } from "@/data/treatments";
+
+declare global {
+  interface Window {
+    onTurnstileSuccess?: (token: string) => void;
+  }
+}
 
 export function ContactFormSection() {
   const [name, setName] = useState("");
@@ -11,9 +25,51 @@ export function ContactFormSection() {
   const [topic, setTopic] = useState("Muayene Randevusu");
   const [branch, setBranch] = useState(TREATMENTS_DATA[0].title);
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // Honeypot alanı
+
+  // Sunucu taraflı HMAC-SHA256 Captcha durumu
+  const [captchaImage, setCaptchaImage] = useState<string | null>(null);
+  const [challengeToken, setChallengeToken] = useState<string>("");
+  const [captchaAnswer, setCaptchaAnswer] = useState<string>("");
+  const [loadingCaptcha, setLoadingCaptcha] = useState<boolean>(true);
+
+  // Opsiyonel Cloudflare Turnstile durumu
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const loadCaptcha = useCallback(async () => {
+    setLoadingCaptcha(true);
+    setCaptchaAnswer("");
+    try {
+      const res = await fetch("/api/contact", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setCaptchaImage(data.captchaImage || null);
+        setChallengeToken(data.challengeToken || "");
+        if (data.turnstileSiteKey) {
+          setTurnstileSiteKey(data.turnstileSiteKey);
+        }
+      }
+    } catch {
+      // Sessiz hata yönetimi
+    } finally {
+      setLoadingCaptcha(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCaptcha();
+    window.onTurnstileSuccess = (token: string) => {
+      setTurnstileToken(token);
+    };
+    return () => {
+      delete window.onTurnstileSuccess;
+    };
+  }, [loadCaptcha]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,44 +88,20 @@ export function ContactFormSection() {
           topic,
           branch,
           message,
+          website,
+          captchaAnswer,
+          challengeToken,
+          turnstileToken,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
+        await loadCaptcha();
         throw new Error(
           data.error || "Mesaj gönderilirken bir hata meydana geldi."
         );
-      }
-
-      // Eğer sunucuda SMTP_PASS henüz girilmemişse, .env'den gelen alıcı e-postasına FormSubmit üzerinden iletir
-      if (data.delivery === "formsubmit" && data.receiverEmail) {
-        const formSubmitRes = await fetch(
-          `https://formsubmit.co/ajax/${encodeURIComponent(data.receiverEmail)}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              _subject: `[Güney Ağız ve Diş Sağlığı] ${topic} - ${name}`,
-              "Ad Soyad": name,
-              "E-Posta": email || "Belirtilmedi",
-              Konu: topic,
-              "Tedavi Branşı": branch,
-              Mesaj: message || "Belirtilmedi",
-              _template: "table",
-            }),
-          }
-        );
-
-        if (!formSubmitRes.ok) {
-          throw new Error(
-            "E-posta servisine bağlanılamadı. Lütfen daha sonra tekrar deneyin."
-          );
-        }
       }
 
       setIsSubmitted(true);
@@ -86,13 +118,19 @@ export function ContactFormSection() {
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-9 shadow-2xs">
-      <div className="pb-5 border-b border-slate-100">
-        <span className="text-xs font-extrabold uppercase tracking-wider text-red-700">
-          BİZE YAZIN
-        </span>
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
-          İletişim ve Randevu Talep Formu
-        </h2>
+      <div className="pb-5 border-b border-slate-100 flex items-center justify-between gap-4">
+        <div>
+          <span className="text-xs font-extrabold uppercase tracking-wider text-red-700">
+            BİZE YAZIN
+          </span>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+            İletişim ve Randevu Talep Formu
+          </h2>
+        </div>
+        <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-700">
+          <ShieldCheck className="w-3.5 h-3.5 text-red-700" />
+          <span>Captcha Korumalı</span>
+        </div>
       </div>
 
       {isSubmitted ? (
@@ -104,7 +142,7 @@ export function ContactFormSection() {
             Mesajınız Başarıyla Gönderildi
           </h3>
           <p className="text-xs sm:text-sm text-emerald-800 max-w-lg mx-auto leading-relaxed">
-            Sayın <strong>{name}</strong>, talebiniz e-posta olarak ilgili
+            Sayın <strong>{name}</strong>, talebiniz güvenli şekilde ilgili
             birimimize iletilmiştir. Dilerseniz dijital asistan bağlantımız
             üzerinden de doğrudan randevu ve bilgi alabilirsiniz:
           </p>
@@ -119,13 +157,27 @@ export function ContactFormSection() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
           {errorMessage && (
             <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 flex items-center gap-2.5 text-xs sm:text-sm text-red-800 font-medium">
               <AlertCircle className="w-4 h-4 text-red-700 shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}
+
+          {/* Gizli Honeypot Alanı (Bot Koruması) */}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="contact-website">Website</label>
+            <input
+              id="contact-website"
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -139,6 +191,8 @@ export function ContactFormSection() {
                 id="contact-name"
                 type="text"
                 required
+                minLength={2}
+                maxLength={100}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Adınız Soyadınız"
@@ -157,6 +211,7 @@ export function ContactFormSection() {
                 id="contact-email"
                 type="email"
                 required
+                maxLength={120}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ornek@eposta.com"
@@ -225,11 +280,80 @@ export function ContactFormSection() {
               id="contact-message"
               rows={4}
               required
+              minLength={5}
+              maxLength={2000}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Sorunuzu veya randevu talebinizi yazabilirsiniz..."
               className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-xs sm:text-sm text-slate-900 focus:border-red-600 focus:bg-white focus:outline-none"
             />
+          </div>
+
+          {/* Sunucu Doğrulamalı Kriptografik Captcha Alanı */}
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+            <label
+              htmlFor="contact-captcha"
+              className="block text-xs font-bold text-slate-800"
+            >
+              Güvenlik Doğrulaması (Captcha) *
+            </label>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2">
+                {captchaImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={captchaImage}
+                    alt="Güvenlik Kodu"
+                    width={140}
+                    height={44}
+                    className="h-11 w-[140px] rounded-xl border border-rose-200 select-none"
+                  />
+                ) : (
+                  <div className="h-11 w-[140px] rounded-xl bg-slate-200 animate-pulse" />
+                )}
+
+                <button
+                  type="button"
+                  onClick={loadCaptcha}
+                  disabled={loadingCaptcha}
+                  aria-label="Yeni Güvenlik Kodu Üret"
+                  title="Yeni Kod Üret"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-red-700 hover:text-red-700 transition-colors cursor-pointer"
+                >
+                  <RefreshCw
+                    className={`w-4 h-4 ${loadingCaptcha ? "animate-spin" : ""}`}
+                  />
+                </button>
+              </div>
+
+              <input
+                id="contact-captcha"
+                type="text"
+                inputMode="numeric"
+                required
+                maxLength={6}
+                value={captchaAnswer}
+                onChange={(e) => setCaptchaAnswer(e.target.value)}
+                placeholder="İşlem sonucunu yazınız"
+                className="flex-1 min-w-[180px] rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 focus:border-red-600 focus:outline-none min-h-[44px]"
+              />
+            </div>
+
+            {/* Opsiyonel Cloudflare Turnstile Widget (Eğer .env'de tanımlıysa otomatik aktif olur) */}
+            {turnstileSiteKey && (
+              <div className="pt-2">
+                <Script
+                  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                  strategy="lazyOnload"
+                />
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={turnstileSiteKey}
+                  data-callback="onTurnstileSuccess"
+                />
+              </div>
+            )}
           </div>
 
           <button
@@ -240,10 +364,10 @@ export function ContactFormSection() {
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Gönderiliyor...</span>
+                <span>Doğrulanıyor ve Gönderiliyor...</span>
               </>
             ) : (
-              <span>Gönder</span>
+              <span>Güvenli Gönder</span>
             )}
           </button>
         </form>
