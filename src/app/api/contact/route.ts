@@ -240,7 +240,7 @@ export async function POST(request: Request) {
     const receiverEmail =
       process.env.CONTACT_RECEIVER_EMAIL || "incecamberat@gmail.com";
 
-    const smtpHost = process.env.SMTP_HOST || "mail.guneyagizvedis.com";
+    const smtpHost = process.env.SMTP_HOST || "mail.kurumsaleposta.com";
     const smtpPort = Number(process.env.SMTP_PORT || "587");
     const smtpUser = process.env.SMTP_USER || "info@guneyagizvedis.com";
     const smtpPass = process.env.SMTP_PASS;
