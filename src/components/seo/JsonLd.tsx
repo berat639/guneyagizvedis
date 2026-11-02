@@ -40,14 +40,7 @@ export function ClinicOrganizationJsonLd() {
       latitude: CLINIC_INFO.address.coordinates.lat,
       longitude: CLINIC_INFO.address.coordinates.lng,
     },
-    medicalSpecialty: [
-      "Dentistry",
-      "Endodontics",
-      "Orthodontics",
-      "PediatricDentistry",
-      "Prosthodontics",
-      "OralSurgery",
-    ],
+    medicalSpecialty: "Dentistry",
   };
 
   return (

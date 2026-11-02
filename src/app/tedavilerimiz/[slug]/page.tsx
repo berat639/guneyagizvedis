@@ -10,7 +10,7 @@ import {
   Sparkles,
   ChevronRight,
 } from "lucide-react";
-import { CLINIC_INFO } from "@/data/clinic";
+import { CLINIC_INFO, OG_DEFAULTS } from "@/data/clinic";
 import { TREATMENTS_DATA, getTreatmentBySlug } from "@/data/treatments";
 import {
   BreadcrumbJsonLd,
@@ -40,13 +40,15 @@ export async function generateMetadata({
   }
 
   return {
-    title: treatment.seoTitle,
+    title: { absolute: treatment.seoTitle },
     description: treatment.seoDescription,
     keywords: treatment.keywords,
     alternates: {
       canonical: `/tedavilerimiz/${treatment.slug}`,
     },
     openGraph: {
+      ...OG_DEFAULTS,
+      type: "article",
       title: treatment.seoTitle,
       description: treatment.seoDescription,
       url: `${CLINIC_INFO.domain}/tedavilerimiz/${treatment.slug}`,

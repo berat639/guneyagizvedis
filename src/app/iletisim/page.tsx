@@ -7,17 +7,25 @@ import {
   CheckCircle2,
   Calendar,
 } from "lucide-react";
-import { CLINIC_INFO } from "@/data/clinic";
+import { CLINIC_INFO, OG_DEFAULTS } from "@/data/clinic";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { ContactFormSection } from "@/components/sections/ContactFormSection";
 
+const TITLE = "İletişim ve Randevu | Güney Ağız ve Diş Sağlığı";
+const DESCRIPTION =
+  "Topçu Mahallesi 1512. Cadde No:52 Etimesgut / Ankara. Güney Ağız ve Diş Sağlığı Polikliniği adres, yol tarifi ve randevu.";
+
 export const metadata: Metadata = {
-  title:
-    "İletişim, Adres ve Randevu | Özel Güney Ağız ve Diş Sağlığı Etimesgut",
-  description:
-    "Ankara Etimesgut Topçu Mahallesi 1512. Cadde No:52 adresinde bulunan Özel Güney Ağız ve Diş Sağlığı Polikliniği adres bilgileri, yol tarifi ve iletişim formu.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: {
     canonical: "/iletisim",
+  },
+  openGraph: {
+    ...OG_DEFAULTS,
+    url: `${CLINIC_INFO.domain}/iletisim`,
+    title: TITLE,
+    description: DESCRIPTION,
   },
 };
 

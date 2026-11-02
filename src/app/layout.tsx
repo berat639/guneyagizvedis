@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { CLINIC_INFO } from "@/data/clinic";
+import { CLINIC_INFO, OG_DEFAULTS } from "@/data/clinic";
 import { AssistantProvider } from "@/components/assistant/AssistantContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -9,12 +9,11 @@ import { ClinicOrganizationJsonLd } from "@/components/seo/JsonLd";
 export const metadata: Metadata = {
   metadataBase: new URL(CLINIC_INFO.domain),
   title: {
-    default:
-      "Etimesgut Diş Hekimi | Özel Güney Ağız ve Diş Sağlığı Polikliniği",
+    default: "Etimesgut Diş Hekimi | Güney Ağız ve Diş Sağlığı",
     template: "%s | Güney Ağız ve Diş Sağlığı",
   },
   description:
-    "Etimesgut Topçu Mahallesi'nde diş polikliniği: kanal tedavisi, implant, çocuk diş hekimliği, zirkonyum ve protez, ortodonti, diş estetiği. Klinik içinde panoramik röntgen ve 3D tomografi.",
+    "Etimesgut Topçu Mahallesi'nde kanal tedavisi, implant, çocuk diş hekimliği, protez, ortodonti ve diş estetiği. Röntgen ve 3D tomografi klinikte.",
   keywords: [
     "etimesgut diş hekimi",
     "etimesgut diş kliniği",
@@ -31,22 +30,11 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    type: "website",
-    locale: "tr_TR",
+    ...OG_DEFAULTS,
     url: CLINIC_INFO.domain,
-    siteName: CLINIC_INFO.officialTitle,
-    title:
-      "Özel Güney Ağız ve Diş Sağlığı Polikliniği | Etimesgut / Ankara",
+    title: "Etimesgut Diş Hekimi | Güney Ağız ve Diş Sağlığı",
     description:
-      "Etimesgut Topçu Mahallesi'nde kanal tedavisi, implant, çocuk diş hekimliği, protez, ortodonti ve diş estetiği. Klinik içinde röntgen ve 3D tomografi.",
-    images: [
-      {
-        url: CLINIC_INFO.images.heroRoom,
-        width: 1200,
-        height: 630,
-        alt: CLINIC_INFO.officialTitle,
-      },
-    ],
+      "Etimesgut Topçu Mahallesi'nde kanal tedavisi, implant, çocuk diş hekimliği, protez, ortodonti ve diş estetiği.",
   },
   robots: {
     index: true,

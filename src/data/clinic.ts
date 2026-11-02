@@ -44,6 +44,18 @@ export const CLINIC_INFO = {
   },
 };
 
+export const OG_DEFAULTS = {
+  type: "website" as const,
+  locale: "tr_TR",
+  siteName: CLINIC_INFO.officialTitle,
+  images: [
+    {
+      url: CLINIC_INFO.images.heroRoom,
+      alt: CLINIC_INFO.officialTitle,
+    },
+  ],
+};
+
 export const MAIN_NAVIGATION: NavItem[] = [
   { label: "Ana Sayfa", href: "/" },
   { label: "Hakkımızda", href: "/hakkimizda" },

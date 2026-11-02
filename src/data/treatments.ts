@@ -55,9 +55,9 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "Çene kemiğinde oluşan iltihap dişin kaybına, çevre dokularının da harabiyetine neden olur. Bu safhaya gelmeden önce dişi ve çevre dokuları korumak için hastalıklı pulpa dokusunun alınması ve kök kanallarının biyouyumlu materyallerle doldurulması en doğru klinik yaklaşımdır.",
     ],
     seoTitle:
-      "Kanal Tedavisi Nedir, Nasıl Yapılır, Acıtır mı? | Etimesgut Diş Hekimi",
+      "Kanal Tedavisi Nedir, Acıtır mı? | Etimesgut Diş Hekimi",
     seoDescription:
-      "Kanal tedavisi hangi durumlarda gerekir, kaç seans sürer, acıtır mı, sonrasında neye dikkat edilir? Etimesgut Güney Ağız ve Diş Sağlığı'ndan net yanıtlar.",
+      "Kanal tedavisi ne zaman gerekir, kaç seans sürer, acıtır mı, sonrasında nelere dikkat edilir? Etimesgut Güney Ağız ve Diş Sağlığı.",
     keywords: [
       "endodonti",
       "kanal tedavisi",
@@ -188,9 +188,9 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "Tedavinin başarısı büyük ölçüde planlamaya bağlıdır. Klinik içinde çekilen 3D dental tomografi ile kemiğin yüksekliği, genişliği, sinüs ve sinir kanalına olan mesafesi ölçülür; implantın boyu, çapı ve açısı bu ölçülere göre belirlenir.",
     ],
     seoTitle:
-      "İmplant Nedir, Nasıl Yapılır, Kimlere Uygulanır? | Etimesgut İmplant",
+      "İmplant Nedir, Nasıl Yapılır? | Etimesgut İmplant",
     seoDescription:
-      "İmplant tedavisi aşamaları, iyileşme süresi, ağrı durumu ve kimlere uygun olduğu. Etimesgut Güney Ağız ve Diş Sağlığı'nda 3D tomografi ile implant planlaması.",
+      "İmplant tedavisi aşamaları, iyileşme süresi, ağrı durumu ve kimlere uygun olduğu. Etimesgut'ta 3D tomografi ile implant planlaması.",
     keywords: [
       "implant tedavisi",
       "dental implant nedir",
@@ -319,7 +319,7 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "Muayenede çocuğun çürük riski; beslenme, fırçalama alışkanlığı ve mevcut diş durumuna göre değerlendirilir. Riske göre fissür örtücü, flor vernik ve kontrol aralığı belirlenir.",
     ],
     seoTitle:
-      "Çocuk Diş Hekimi (Pedodonti) Etimesgut | Süt Dişi, Fissür Örtücü, Flor",
+      "Çocuk Diş Hekimi (Pedodonti) | Etimesgut",
     seoDescription:
       "Çocuklarda ilk diş muayenesi ne zaman yapılır, süt dişi çürüğü tedavi edilmeli mi, fissür örtücü ve flor nedir? Etimesgut Güney Ağız ve Diş Sağlığı.",
     keywords: [
@@ -440,7 +440,7 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "Ayrıca son yıllarda öne çıkan estetik diş hekimliği uygulamaları da (Porselen Laminalar, Gülüş Tasarımı, Empress tam seramik kaplama, Zirkonyum Porselen vb.) protetik tedavi kapsamına girmektedir ve diş hekimliğindeki önemli uzmanlık alanlarından birisidir.",
     ],
     seoTitle:
-      "Diş Protezi Çeşitleri: Zirkonyum, Köprü, Hareketli Protez | Etimesgut",
+      "Diş Protezi ve Zirkonyum Kaplama | Etimesgut",
     seoDescription:
       "Sabit ve hareketli protez farkları, zirkonyum kaplama ne kadar sürer, proteze alışma süreci. Etimesgut Güney Ağız ve Diş Sağlığı'nda protez tedavisi.",
     keywords: [
@@ -555,7 +555,7 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "Çene gelişimindeki sorunlar büyüme devam ederken çok daha kolay yönlendirilebildiği için ilk ortodontik kontrol 7-8 yaş civarında önerilir. Diş dizilim bozuklukları ise diş ve diş eti sağlıklı olduğu sürece yetişkinlerde de tedavi edilebilir.",
     ],
     seoTitle:
-      "Ortodonti (Diş Teli, Şeffaf Plak) Ne Kadar Sürer? | Etimesgut Ortodonti",
+      "Ortodonti: Diş Teli ve Şeffaf Plak | Etimesgut",
     seoDescription:
       "Diş teli ve şeffaf plak tedavisi ne kadar sürer, kaç yaşında yapılır, acıtır mı? Etimesgut Güney Ağız ve Diş Sağlığı'nda çocuk ve yetişkin ortodonti.",
     keywords: [
@@ -675,7 +675,7 @@ export const TREATMENTS_DATA: TreatmentItem[] = [
       "Ortodontik hizalama, koruyucu kompozit/porselen lamina restorasyonlar, biyouyumlu tam seramik uygulamalar ve diş eti uyumu (pembe estetik) bir arada ele alınarak, bireyin yüz ve çene yapısıyla uyumlu, sağlıklı ve doğal bir gülümseme fonksiyonu hedeflenir.",
     ],
     seoTitle:
-      "Diş Estetiği: Bonding, Lamina, Gülüş Tasarımı | Etimesgut Diş Hekimi",
+      "Diş Estetiği: Bonding, Lamina | Etimesgut Diş Hekimi",
     seoDescription:
       "Bonding ve porselen lamina farkı, diş arası boşluk kapatma, diş beyazlatma ve gülüş tasarımı. Etimesgut Güney Ağız ve Diş Sağlığı'nda diş estetiği.",
     keywords: [

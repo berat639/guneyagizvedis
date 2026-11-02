@@ -11,15 +11,24 @@ import {
   HeartHandshake,
   Sparkles,
 } from "lucide-react";
-import { CLINIC_INFO } from "@/data/clinic";
+import { CLINIC_INFO, OG_DEFAULTS } from "@/data/clinic";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
+const TITLE = "Hakkımızda | Güney Ağız ve Diş Sağlığı Etimesgut";
+const DESCRIPTION =
+  "Etimesgut Topçu Mahallesi'ndeki polikliniğimiz: tedavi alanları, klinik içinde röntgen ve 3D tomografi, sterilizasyon ve tedavi ilkelerimiz.";
+
 export const metadata: Metadata = {
-  title: "Hakkımızda | Özel Güney Ağız ve Diş Sağlığı Polikliniği Etimesgut",
-  description:
-    "Ankara Etimesgut'ta hizmet veren Özel Güney Ağız ve Diş Sağlığı Polikliniği'nin kurumsal yapısı, vizyonu, misyonu, sterilizasyon standartları ve teknolojik altyapısı.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: {
     canonical: "/hakkimizda",
+  },
+  openGraph: {
+    ...OG_DEFAULTS,
+    url: `${CLINIC_INFO.domain}/hakkimizda`,
+    title: TITLE,
+    description: DESCRIPTION,
   },
 };
 

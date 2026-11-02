@@ -2,18 +2,26 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Stethoscope, CheckCircle2, ArrowRight } from "lucide-react";
-import { CLINIC_INFO } from "@/data/clinic";
+import { CLINIC_INFO, OG_DEFAULTS } from "@/data/clinic";
 import { TREATMENTS_DATA } from "@/data/treatments";
 import { TreatmentsGrid } from "@/components/sections/TreatmentsGrid";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
+const TITLE = "Diş Tedavileri Etimesgut | Güney Ağız ve Diş Sağlığı";
+const DESCRIPTION =
+  "Kanal tedavisi, implant, çocuk diş hekimliği, protez ve zirkonyum, ortodonti ve diş estetiği: nasıl yapılır, ne kadar sürer, acıtır mı?";
+
 export const metadata: Metadata = {
-  title:
-    "Tedavilerimiz | Endodonti, İmplant, Pedodonti, Protez, Ortodonti & Diş Estetiği",
-  description:
-    "Özel Güney Ağız ve Diş Sağlığı Polikliniği'nde uygulanan Endodonti (Kanal Tedavisi), İmplant Tedavisi, Pedodonti, Protez Tedavisi, Ortodonti ve Diş Estetiği branşları hakkında detaylı bilgilendirme.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: {
     canonical: "/tedavilerimiz",
+  },
+  openGraph: {
+    ...OG_DEFAULTS,
+    url: `${CLINIC_INFO.domain}/tedavilerimiz`,
+    title: TITLE,
+    description: DESCRIPTION,
   },
 };
 
